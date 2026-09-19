@@ -132,7 +132,7 @@ function OrbitPage() {
         <div className="mx-auto flex max-w-4xl items-center justify-between px-5 py-5 sm:px-8">
           <div>
             <p className="font-display text-3xl leading-none">Orbit</p>
-            <p className="mt-1 text-xs text-muted-foreground">Opportunity tracker</p>
+            <p className="mt-1 text-xs text-muted-foreground">Track anything and Everything</p>
           </div>
           <Button variant="ghost" size="icon" className="h-11 w-11" onClick={() => setStatsOpen(!statsOpen)} aria-label="Toggle statistics">
             <BarChart3 className="size-5" />
