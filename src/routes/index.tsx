@@ -84,9 +84,14 @@ function isImminent(opportunity: Opportunity) {
 }
 
 function calendarUrl(opportunity: Opportunity) {
-  const start = format(parseISO(opportunity.deadline), "yyyyMMdd");
-  const end = format(parseISO(opportunity.deadline), "yyyyMMdd", ) ;
-  return void 0;
+  const date = format(parseISO(opportunity.deadline), "yyyyMMdd");
+  const nextDay = format(parseISO(opportunity.deadline).getTime() + 86_400_000 ? new Date(parseISO(opportunity.deadline).getTime() + 86_400_000) : new Date(), "yyyyMMdd");
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: `${opportunity.title} — ${opportunity.organization}`,
+    dates: `${date}/${nextDay}`,
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
 function OrbitPage() {
