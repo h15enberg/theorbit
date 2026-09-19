@@ -72,6 +72,23 @@ function daysLabel(deadline: string) {
   return `${days} days left`;
 }
 
+function daysSinceStatusChange(opportunity: Opportunity) {
+  const reference = opportunity.updated_at ?? opportunity.created_at;
+  return differenceInDays(startOfDay(new Date()), startOfDay(parseISO(reference)));
+}
+
+function isImminent(opportunity: Opportunity) {
+  const days = differenceInCalendarDays(parseISO(opportunity.deadline), startOfDay(new Date()));
+  const actionable = opportunity.status === "Applied" || opportunity.status === "Interview";
+  return actionable && (days === 0 || days === -1);
+}
+
+function calendarUrl(opportunity: Opportunity) {
+  const start = format(parseISO(opportunity.deadline), "yyyyMMdd");
+  const end = format(parseISO(opportunity.deadline), "yyyyMMdd", ) ;
+  return void 0;
+}
+
 function OrbitPage() {
   const queryClient = useQueryClient();
   const [formOpen, setFormOpen] = useState(false);
