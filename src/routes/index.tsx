@@ -256,6 +256,9 @@ function StatsPanel({ stats }: { stats: { total: number; pending: number; rate: 
 function OpportunityRow({ opportunity, onEdit, onDelete, onStatus }: { opportunity: Opportunity; onEdit: () => void; onDelete: () => void; onStatus: (status: OpportunityStatus) => void }) {
   const days = differenceInCalendarDays(parseISO(opportunity.deadline), startOfDay(new Date()));
   const urgent = days >= 0 && days <= 3;
+  const imminent = isImminent(opportunity);
+  const waitingDays = opportunity.status === "Applied" ? daysSinceStatusChange(opportunity) : 0;
+  const nudge = opportunity.status === "Applied" && waitingDays >= 14;
   return (
     <article className={`border border-border bg-card p-4 sm:p-5 ${urgent ? "border-l-[3px] border-l-urgent" : ""}`}>
       <div className="flex items-start gap-3">
@@ -263,7 +266,13 @@ function OpportunityRow({ opportunity, onEdit, onDelete, onStatus }: { opportuni
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h3 className="truncate text-base font-semibold">{opportunity.title}</h3>
+              {imminent ? (
+                <span className="inline-block max-w-full truncate rounded-full bg-imminent px-3 py-1 text-sm font-semibold text-imminent-foreground" title={opportunity.title}>
+                  {opportunity.title}
+                </span>
+              ) : (
+                <h3 className="truncate text-base font-semibold">{opportunity.title}</h3>
+              )}
               <p className="mt-0.5 truncate text-sm text-muted-foreground">{opportunity.organization} · {opportunity.opportunity_type}</p>
             </div>
             <div className="flex shrink-0">
@@ -271,6 +280,12 @@ function OpportunityRow({ opportunity, onEdit, onDelete, onStatus }: { opportuni
               <Button variant="ghost" size="icon" className="h-11 w-11 text-muted-foreground hover:text-destructive" onClick={onDelete} aria-label={`Delete ${opportunity.title}`}><Trash2 /></Button>
             </div>
           </div>
+          {nudge && (
+            <p className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Bell className="size-3.5 shrink-0" aria-hidden="true" />
+              <span>No response in {waitingDays} days — consider following up.</span>
+            </p>
+          )}
           <div className="mt-4 flex flex-col gap-3 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <CalendarDays className="size-4" />
@@ -285,7 +300,17 @@ function OpportunityRow({ opportunity, onEdit, onDelete, onStatus }: { opportuni
               <SelectContent>{STATUSES.map((status) => <SelectItem key={status} value={status}>{status}</SelectItem>)}</SelectContent>
             </Select>
           </div>
-          {opportunity.note && <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted-foreground">{opportunity.note}</p>}
+          <a
+            href={calendarUrl(opportunity)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex min-h-11 items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+            aria-label={`Add ${opportunity.title} to Google Calendar`}
+          >
+            <CalendarPlus className="size-4" aria-hidden="true" />
+            <span>Add to Calendar</span>
+          </a>
+          {opportunity.note && <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">{opportunity.note}</p>}
         </div>
       </div>
     </article>
