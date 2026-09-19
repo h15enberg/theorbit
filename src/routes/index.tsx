@@ -84,12 +84,12 @@ function isImminent(opportunity: Opportunity) {
 }
 
 function calendarUrl(opportunity: Opportunity) {
-  const date = format(parseISO(opportunity.deadline), "yyyyMMdd");
-  const nextDay = format(parseISO(opportunity.deadline).getTime() + 86_400_000 ? new Date(parseISO(opportunity.deadline).getTime() + 86_400_000) : new Date(), "yyyyMMdd");
+  const deadline = parseISO(opportunity.deadline);
+  const nextDay = new Date(deadline.getTime() + 86_400_000);
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: `${opportunity.title} — ${opportunity.organization}`,
-    dates: `${date}/${nextDay}`,
+    dates: `${format(deadline, "yyyyMMdd")}/${format(nextDay, "yyyyMMdd")}`,
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
