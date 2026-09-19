@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { differenceInCalendarDays, differenceInDays, format, parseISO, startOfDay } from "date-fns";
-import { BarChart3, BriefcaseBusiness, CalendarDays, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
+import { BarChart3, BriefcaseBusiness, CalendarDays, Pencil, Plus, Trash2 } from "lucide-react";
 import { useMemo, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 

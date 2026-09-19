@@ -69,6 +69,7 @@
   --color-status-accepted: var(--status-accepted);
   --color-status-rejected: var(--status-rejected);
   --color-status-waiting: var(--status-waiting);
+  --color-overlay: var(--overlay);
 }
 
 :root {
@@ -99,6 +100,7 @@
   --status-accepted: oklch(0.48 0.09 158);
   --status-rejected: oklch(0.55 0.06 30);
   --status-waiting: oklch(0.62 0.025 70);
+  --overlay: oklch(0.16 0.012 60 / 48%);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
